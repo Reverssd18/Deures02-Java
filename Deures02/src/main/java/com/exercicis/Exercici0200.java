@@ -105,14 +105,11 @@ public class Exercici0200 {
                 if (col == 0 || col == row) {
                     currentRow.add(1);
                 } else {
-                    int value = triangle.get(row - 1).get(col - 1) + triangle.get(row - 1).get(col); // Suma dels dos
-                                                                                                     // números
-                                                                                                     // anteriors a la
-                                                                                                     // rowActual
-                    currentRow.add(value); // Add values to th currentRow ArrayList
+                    int value = triangle.get(row - 1).get(col - 1) + triangle.get(row - 1).get(col); 
+                    currentRow.add(value); 
                 }
             }
-            triangle.add(currentRow); // add the row to the pascaltriangle
+            triangle.add(currentRow); 
         }
 
         // Print the Pascal's Triangle
@@ -400,8 +397,37 @@ public class Exercici0200 {
      *       com.exercicis.TestExercici0200#testMinDistancesNoTargetFound
      */
     public static ArrayList<Integer> minDistances(String text, char target) {
-        ArrayList<Integer> rst = new ArrayList<>();
-        return rst;
+        int textLength = text.length();
+        int[] left = new int[textLength];
+        int[] right = new int[textLength];
+
+        // Inicialitzar els arrays amb la longitud de la cadena
+        Arrays.fill(left, textLength);
+        Arrays.fill(right, textLength);
+
+        // Distàncies mínimes de l'esquerra a la dreta
+        int lastTargetIndex = -textLength;
+        for (int cntChar = 0; cntChar < textLength; cntChar = cntChar + 1) {
+            if (text.charAt(cntChar) == target)
+                lastTargetIndex = cntChar;
+            left[cntChar] = cntChar - lastTargetIndex;
+        }
+
+        // Distàncies mínimes de la dreta a l'esquerra
+        lastTargetIndex = 2 * textLength;
+        for (int cntChar = (textLength - 1); cntChar >= 0; cntChar = cntChar - 1) {
+            if (text.charAt(cntChar) == target)
+                lastTargetIndex = cntChar;
+            right[cntChar] = lastTargetIndex - cntChar;
+        }
+
+        // Formar la llista de distàncies mínimes
+        ArrayList<Integer> distances = new ArrayList<>(textLength);
+        for (int cntChar = 0; cntChar < textLength; cntChar = cntChar + 1) {
+            distances.add(Math.min(left[cntChar], right[cntChar]));
+        }
+
+        return distances;
     }
 
     /**
