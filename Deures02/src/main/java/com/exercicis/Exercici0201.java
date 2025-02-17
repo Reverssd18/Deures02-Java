@@ -14,11 +14,11 @@ public class Exercici0201 {
     public static Locale defaultLocale;
 
     public static void main(String[] args) {
-       
+  
         scanner = new Scanner(System.in);
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
-        
+/*      
         int[] arrEnters = generaArrayEnters(10);
         mostraArrayEstadistiques(arrEnters);
 
@@ -33,7 +33,7 @@ public class Exercici0201 {
 
         ArrayList<Double> lstDecimals = generaLlistaDecimals(15);
         filtraLlistaDecimalsSuperiors50(lstDecimals);
- 
+
         HashMap<String, Integer> persones = new HashMap<>();
         persones.put("Anna", 25);
         persones.put("Joan", 30);
@@ -43,12 +43,15 @@ public class Exercici0201 {
         mostrarFrecuenciaParaules();
         invertirMapaClauValor();
         fusionarMapesSumantValors();
-        ordenarMapaPerClaus();
+
+
         calcularEstadistiquesNotesEstudiants();
 
+       
+*/
+        ordenarMapaPerClaus();
         Locale.setDefault(defaultLocale);
         scanner.close();
-
     }
 
     /**
@@ -299,7 +302,7 @@ public class Exercici0201 {
      * 
      * L'usuari escriu una frase per la consola i el mètode separa les paraules usant els espais.
      * A continuació, es calcula la freqüència de cada paraula i es mostra per pantalla en format de HashMap.
-     * 
+     *  
      * 
      * Es mostra per pantalla:
      * "Introdueix una frase:" i després "Freqüència de paraules: {paraula=frequencia, ...}".
@@ -307,7 +310,20 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testMostrarFrecuenciaParaules
      */
     public static void mostrarFrecuenciaParaules() {
+        System.out.println("Introdueix una frase: ");
+        String frase = scanner.nextLine();
 
+        String[] paraules = frase.split(" ");
+        HashMap<String, Integer> freq = new HashMap<>();
+        for (String paraula : paraules) {
+            if (freq.containsKey(paraula)) {
+                freq.put(paraula, freq.get(paraula) + 1);
+            } else {
+                freq.put(paraula, 1);
+            }
+        }
+        System.out.println("Freqüència de paraules: " + freq);
+        
     }
 
     /**
@@ -323,7 +339,17 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testInvertirMapaClauValor
      */
     public static void invertirMapaClauValor() {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("A", 1);
+        map.put("B", 2);
+        map.put("C", 3);
 
+        HashMap<Integer, String> mapInvertit = new HashMap<>();
+        for (String clau : map.keySet()) {
+            mapInvertit.put(map.get(clau), clau); 
+        }
+        System.out.println("Mapa original: " + map);
+        System.out.println("Mapa invertit: " + mapInvertit);
     }
 
     /**
@@ -343,7 +369,23 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testFusionarMapesSumantValors
      */
     public static void fusionarMapesSumantValors() {
-
+        HashMap<String, Integer> mapa1 = new HashMap<>();
+        HashMap<String, Integer> mapa2 = new HashMap<>();
+        mapa1.put("X", 10);
+        mapa1.put("Y", 20);
+        mapa2.put("Y", 5);
+        mapa2.put("Z", 15);
+        
+        HashMap<String, Integer> mapaFusionat = new HashMap<>(mapa1);
+        
+        for (String clau : mapa2.keySet()) {
+            if (mapaFusionat.containsKey(clau)) {
+                mapaFusionat.put(clau, mapaFusionat.get(clau) + mapa2.get(clau));
+            } else {
+                mapaFusionat.put(clau, mapa2.get(clau));
+            }
+        }
+        System.out.println("Mapa fusionat: " + mapaFusionat);
     }
 
     /**
@@ -353,13 +395,21 @@ public class Exercici0201 {
      * per obtenir un ordre natural de les claus (alfabètic).
      * 
      * 
-     * Es mostra per pantalla:
-     * "Mapa ordenat per claus: {Banana=3, Poma=5, Taronja=2}".
+     * Mostrar les claus amb el seu valor ordenat per nom de clau.
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0201#testOrdenarMapaPerClaus
      */
     public static void ordenarMapaPerClaus() {
+        HashMap<String, Integer> mapa = new HashMap<>();
+        mapa.put("Poma", 5);
+        mapa.put("Banana", 3);
+        mapa.put("Taronja", 2);
 
+
+        ArrayList <String> claus = new ArrayList<>(mapa.keySet());
+        claus.sort((a,b) -> a.compareTo(b));
+        
+        System.out.println("Mapa ordenat per nom: " + claus );
     }
 
     /**
@@ -375,6 +425,25 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testCalcularEstadistiquesNotesEstudiants
      */
     public static void calcularEstadistiquesNotesEstudiants() {
+        HashMap<String, Integer> notes = new HashMap<>();
+        notes.put("Anna", 7);
+        notes.put("Joan", 5);
+        notes.put("Marc", 9);
 
+        int suma = 0;
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+
+        for (int nota : notes.values()) {
+            suma += nota;
+            if (nota > max) {
+                max = nota;
+            }
+            if (nota < min) {
+                min = nota;
+            }
+        }
+        double mitjana = (double) suma / notes.size();
+        System.out.println("Mitjana: " + mitjana + ", Màxim: " + max + ", Mínim: " + min);
     }
 }
