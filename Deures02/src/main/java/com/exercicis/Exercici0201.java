@@ -1,13 +1,10 @@
 package com.exercicis;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 public class Exercici0201 {
 
@@ -27,7 +24,7 @@ public class Exercici0201 {
         mostraLlistaEstadistiques(lstEnters);
 
         filtraArrayParaulesAmbA();
-        filtraLlistaParaulesAmbA();
+        filtraLlistaParaulesAmbA(Exercici0201.scanner);
 
         double[] arrDecimals = generaArrayDecimals(15);
         filtraArrayDecimalsSuperiors50(arrDecimals);
@@ -121,7 +118,20 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testFiltraArrayParaulesAmbA
      */
     public static void filtraArrayParaulesAmbA() {
-
+        System.out.print("Escriu 5 paraules separades per ',' o ', ': ");
+        String[] paraules = scanner.nextLine().split(", ");
+        System.out.print("\nParaules que comencen amb 'a': ");
+        
+        for (int cnt = 0; cnt < paraules.length ; cnt++) {
+            String cm =", ";
+                if (cnt == paraules.length - 1) {
+                    cm = "\n";
+                }
+            if (paraules[cnt].toLowerCase().startsWith("a")) {
+                System.out.print(paraules[cnt] + cm);
+            }
+        }
+        scanner.close();
     }
        
     /**
@@ -136,8 +146,23 @@ public class Exercici0201 {
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0201#testFiltraLlistaParaulesAmbA
      */
-    public static void filtraLlistaParaulesAmbA() {
+    public static void filtraLlistaParaulesAmbA(Scanner scanner1) {
+        System.out.print("Escriu 5 paraules separades per ',' o ', ': ");
+        ArrayList<String> paraules = new ArrayList<>(List.of(scanner1.nextLine().split(", ")));
+        String coma = ", ";
+        
+        System.out.print("\nParaules que comencen amb 'a': ");
 
+        for (int i = 0; i < paraules.size(); i++) {
+            if (paraules.get(i).toLowerCase().startsWith("a")) {
+                if (i == paraules.size() - 1) {
+                    coma = " ";
+                }
+                System.out.print(paraules.get(i) + coma);
+            }
+        }
+            
+        
     }
 
     /**
@@ -149,7 +174,10 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testGeneraArrayDecimals
      */
     public static double[] generaArrayDecimals(int mida) {
-        double[] rst = new double[0];
+        double[] rst = new double[mida];
+        for (int i = 0; i < mida; i++) {
+            rst[i] =  Math.random() * 100;
+        }
         return rst;
     }
 
