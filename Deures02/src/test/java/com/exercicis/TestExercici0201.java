@@ -1,5 +1,6 @@
 package com.exercicis;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import com.github.stefanbirkner.systemlambda.SystemLambda;
+import com.testStringUtils.TestStringUtils;
 
 class TestExercici0201 {
 
@@ -54,9 +56,17 @@ class TestExercici0201 {
     void testMostraArrayEstadistiques(TestInfo testInfo) throws Exception {
         try {
             int[] arr = {1, 2, 3, 4, 5};
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.mostraArrayEstadistiques(arr));
-            String expected = "Array: [1, 2, 3, 4, 5]\nMàxim: 5  Mínim: 1  Mitjana: 3.0";
-            assertEquals(expected, output.trim());
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.mostraArrayEstadistiques(arr)).trim().replace("\r\n", "\n");
+            
+            String expected = """
+                Array: [1, 2, 3, 4, 5]
+                Màxim: 5  Mínim: 1  Mitjana: 3.0
+                """.trim().replace("\r\n", "\n");
+    
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -66,7 +76,7 @@ class TestExercici0201 {
             e.printStackTrace();
         }
     }
-
+   
     @Test
     void testGeneraLlistaEnters(TestInfo testInfo) {
         try {
@@ -89,9 +99,17 @@ class TestExercici0201 {
     void testMostraLlistaEstadistiques(TestInfo testInfo) throws Exception {
         try {
             ArrayList<Integer> list = new ArrayList<>(Arrays.asList(10, 20, 30));
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.mostraLlistaEstadistiques(list));
-            String expected = "Llista: [10, 20, 30]\nMàxim: 30  Mínim: 10  Mitjana: 20.0";
-            assertEquals(expected, output.trim());
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.mostraLlistaEstadistiques(list)).trim().replace("\r\n", "\n");
+    
+            String expected = """
+                Llista: [10, 20, 30]
+                Màxim: 30  Mínim: 10  Mitjana: 20.0
+                """.trim().replace("\r\n", "\n");
+    
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0,
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -101,7 +119,7 @@ class TestExercici0201 {
             e.printStackTrace();
         }
     }
-
+   
     @Test
     void testFiltraArrayParaulesAmbA(TestInfo testInfo) throws Exception {
         try {
@@ -115,16 +133,22 @@ class TestExercici0201 {
             Exercici0201.scanner = new Scanner(System.in);
     
             // Captura la sortida
-            String output = SystemLambda.tapSystemOut(() -> {
-                Exercici0201.filtraArrayParaulesAmbA();
-            });
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.filtraArrayParaulesAmbA()).trim().replace("\r\n", "\n");
     
             // Restaura l'entrada original
             System.setIn(originalSystemIn);
     
             // Valida el resultat esperat
-            String expected = "Escriu 5 paraules separades per ',' o ', ':\nParaules que comencen amb 'a': apple, apricot, avocado";
-            assertEquals(expected, output.trim());
+            String expected = """
+                Escriu 5 paraules separades per ',' o ', ':
+                Paraules que comencen amb 'a': apple, apricot, avocado
+                """.trim().replace("\r\n", "\n");
+    
+            // Compara la sortida amb TestStringUtils.findFirstDifference()
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -134,7 +158,7 @@ class TestExercici0201 {
             e.printStackTrace();
         }
     }
-    
+        
     @Test
     void testFiltraLlistaParaulesAmbA(TestInfo testInfo) throws Exception {
         try {
@@ -148,16 +172,22 @@ class TestExercici0201 {
             Exercici0201.scanner = new Scanner(System.in);
     
             // Captura la sortida
-            String output = SystemLambda.tapSystemOut(() -> {
-                Exercici0201.filtraLlistaParaulesAmbA(Exercici0201.scanner);
-            });
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.filtraLlistaParaulesAmbA(null)).trim().replace("\r\n", "\n");
     
             // Restaura l'entrada original
             System.setIn(originalSystemIn);
     
             // Valida el resultat esperat
-            String expected = "Escriu 5 paraules separades per ',' o ', ':\nParaules que comencen amb 'a': apple, apricot, avocado";
-            assertEquals(expected, output.trim());
+            String expected = """
+                Escriu 5 paraules separades per ',' o ', ':
+                Paraules que comencen amb 'a': apple, apricot, avocado
+                """.trim().replace("\r\n", "\n");
+    
+            // Compara la sortida amb TestStringUtils.findFirstDifference()
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -167,7 +197,7 @@ class TestExercici0201 {
             e.printStackTrace();
         }
     }
-    
+        
     @Test
     void testGeneraArrayDecimals(TestInfo testInfo) {
         try {
@@ -190,9 +220,18 @@ class TestExercici0201 {
     void testFiltraArrayDecimalsSuperiors50(TestInfo testInfo) throws Exception {
         try {
             double[] decimals = {10.0, 60.0, 50.0, 75.5};
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.filtraArrayDecimalsSuperiors50(decimals));
-            String expected = "Array original: [10.00, 60.00, 50.00, 75.50]\nValors majors que 50: [60.00, 75.50]";
-            assertEquals(expected, output.trim());
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.filtraArrayDecimalsSuperiors50(decimals)).trim().replace("\r\n", "\n");
+    
+            String expected = """
+                Array original: [10.00, 60.00, 50.00, 75.50]
+                Valors majors que 50: [60.00, 75.50]
+                """.trim().replace("\r\n", "\n");
+    
+            // Comparació amb TestStringUtils.findFirstDifference()
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -201,7 +240,7 @@ class TestExercici0201 {
             System.out.println("Test encountered an error: " + testInfo.getDisplayName());
             e.printStackTrace();
         }
-    }
+    }   
 
     @Test
     void testGeneraLlistaDecimals(TestInfo testInfo) {
@@ -225,9 +264,18 @@ class TestExercici0201 {
     void testFiltraLlistaDecimalsSuperiors50(TestInfo testInfo) throws Exception {
         try {
             ArrayList<Double> list = new ArrayList<>(Arrays.asList(10.0, 60.0, 50.0, 75.5));
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.filtraLlistaDecimalsSuperiors50(list));
-            String expected = "Llista original: [10.00, 60.00, 50.00, 75.50]\nValors majors que 50: [60.00, 75.50]";
-            assertEquals(expected, output.trim());
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.filtraLlistaDecimalsSuperiors50(list)).trim().replace("\r\n", "\n");
+    
+            String expected = """
+                Llista original: [10.00, 60.00, 50.00, 75.50]
+                Valors majors que 50: [60.00, 75.50]
+                """.trim().replace("\r\n", "\n");
+    
+            // Comparació amb TestStringUtils.findFirstDifference()
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -237,7 +285,7 @@ class TestExercici0201 {
             e.printStackTrace();
         }
     }
-
+    
     @Test
     void testMostrarLlistaOrdenadesPerEdat(TestInfo testInfo) throws Exception {
         try {
@@ -245,9 +293,20 @@ class TestExercici0201 {
             persones.put("Anna", 25);
             persones.put("Joan", 30);
             persones.put("Marc", 20);
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.mostrarLlistaOrdenadesPerEdat(persones));
-            String expected = "Marc (20)\nAnna (25)\nJoan (30)";
-            assertEquals(expected, output.trim());
+    
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.mostrarLlistaOrdenadesPerEdat(persones)).trim().replace("\r\n", "\n");
+    
+            String expected = """
+                Marc (20)
+                Anna (25)
+                Joan (30)
+                """.trim().replace("\r\n", "\n");
+    
+            // Comparació amb TestStringUtils.findFirstDifference()
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -257,7 +316,7 @@ class TestExercici0201 {
             e.printStackTrace();
         }
     }
-
+    
     @Test
     void testMostrarFrecuenciaParaules(TestInfo testInfo) throws Exception {
         try {
@@ -271,18 +330,48 @@ class TestExercici0201 {
             Exercici0201.scanner = new Scanner(System.in);
     
             // Captura la sortida
-            String output = SystemLambda.tapSystemOut(() -> {
-                Exercici0201.mostrarFrecuenciaParaules();
-            });
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.mostrarFrecuenciaParaules()).trim().replace("\r\n", "\n");
     
             // Restaura l'entrada original
             System.setIn(originalSystemIn);
     
             // Valida el resultat esperat
-            assertTrue(output.contains("Introdueix una frase:"));
-            assertTrue(output.contains("Freqüència de paraules:"));
-            assertTrue(output.contains("hello=2"));
-            assertTrue(output.contains("world=1"));
+            String expected = """
+                Introdueix una frase:
+                Freqüència de paraules: {world=1, hello=2}""".trim().replace("\r\n", "\n");
+    
+            // Comparació amb TestStringUtils.findFirstDifference()
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
+            System.out.println("Test passed, succeeded!");
+        } catch (AssertionError e) {
+            System.out.println("Test failed: " + testInfo.getDisplayName());
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Test encountered an error: " + testInfo.getDisplayName());
+            e.printStackTrace();
+        }
+    }
+        
+    @Test
+    void testInvertirMapaClauValor(TestInfo testInfo) throws Exception {
+        try {
+            // Captura la sortida de la funció
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.invertirMapaClauValor()).trim().replace("\r\n", "\n");
+    
+            // Valida el resultat esperat
+            String expected = """
+                Mapa original: {A=1, B=2, C=3}
+                Mapa invertit: {1=A, 2=B, 3=C}
+                """.trim().replace("\r\n", "\n");
+    
+            // Comparació amb TestStringUtils.findFirstDifference()
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -294,31 +383,53 @@ class TestExercici0201 {
     }
     
     @Test
-    void testInvertirMapaClauValor(TestInfo testInfo) throws Exception {
-        try {
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.invertirMapaClauValor());
-            assertTrue(output.contains("Mapa original:"));
-            assertTrue(output.contains("{A=1, B=2, C=3}"));
-            assertTrue(output.contains("Mapa invertit:"));
-            assertTrue(output.contains("{1=A, 2=B, 3=C}"));
-            System.out.println("Test passed, succeeded!");
-        } catch (AssertionError e) {
-            System.out.println("Test failed: " + testInfo.getDisplayName());
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Test encountered an error: " + testInfo.getDisplayName());
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     void testFusionarMapesSumantValors(TestInfo testInfo) throws Exception {
         try {
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.fusionarMapesSumantValors());
-            assertTrue(output.contains("Mapa fusionat:"));
-            assertTrue(output.contains("X=10"));
-            assertTrue(output.contains("Y=25"));
-            assertTrue(output.contains("Z=15"));
+            // Captura la sortida de la funció
+            String output = SystemLambda.tapSystemOut(() -> Exercici0201.fusionarMapesSumantValors()).trim().replace("\r\n", "\n");
+    
+            // Valida el resultat esperat
+            String expected = """
+                Mapa fusionat: {X=10, Y=25, Z=15}
+                """.trim().replace("\r\n", "\n");
+    
+            // Comparació amb TestStringUtils.findFirstDifference()
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.compareTo("identical") == 0, 
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
+            System.out.println("Test passed, succeeded!");
+        } catch (AssertionError e) {
+            System.out.println("Test failed: " + testInfo.getDisplayName());
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Test encountered an error: " + testInfo.getDisplayName());
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    void testCalcularEstadistiquesNotesEstudiants(TestInfo testInfo) {
+        try {
+            HashMap<String, Double> notes = new HashMap<>();
+            notes.put("Anna", 7.5);
+            notes.put("Joan", 9.0);
+            notes.put("Pere", 5.8);
+            notes.put("Maria", 8.2);
+            notes.put("Carla", 6.7);
+    
+            // Captura la sortida de consola
+            String output = SystemLambda.tapSystemOut(() -> {
+                Exercici0201.calcularEstadistiquesNotesEstudiants(notes);
+            }).trim().replace("\r\n", "\n");
+    
+            String expected = "Mitjana: 7.44, Màxim: 9.0, Mínim: 5.8";
+    
+            // Comparació amb TestStringUtils
+            String diff = TestStringUtils.findFirstDifference(output, expected);
+            assertTrue(diff.equals("identical"),
+                ">>>>>>>>>> Diff found >>>>>>>>>\n" + diff + "<<<<<<<<< Diff end <<<<<<<<<<<\n");
+    
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
             System.out.println("Test failed: " + testInfo.getDisplayName());
@@ -329,35 +440,4 @@ class TestExercici0201 {
         }
     }
 
-    @Test
-    void testOrdenarMapaPerClaus(TestInfo testInfo) throws Exception {
-        try {
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.ordenarMapaPerClaus());
-            String expected = "Mapa ordenat per claus: {Banana=3, Poma=5, Taronja=2}";
-            assertEquals(expected, output.trim());
-            System.out.println("Test passed, succeeded!");
-        } catch (AssertionError e) {
-            System.out.println("Test failed: " + testInfo.getDisplayName());
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Test encountered an error: " + testInfo.getDisplayName());
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void testCalcularEstadistiquesNotesEstudiants(TestInfo testInfo) throws Exception {
-        try {
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.calcularEstadistiquesNotesEstudiants());
-            String expected = "Mitjana: 7.333333333333333, Màxim: 8.5, Mínim: 6.0";
-            assertEquals(expected, output.trim());
-            System.out.println("Test passed, succeeded!");
-        } catch (AssertionError e) {
-            System.out.println("Test failed: " + testInfo.getDisplayName());
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Test encountered an error: " + testInfo.getDisplayName());
-            e.printStackTrace();
-        }
-    }
 }
