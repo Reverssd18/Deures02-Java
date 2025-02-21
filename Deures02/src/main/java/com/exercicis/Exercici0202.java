@@ -24,8 +24,8 @@ public class Exercici0202 {
 
         //showJSONAstronautes("./Deures02/data/astronautes.json");
 
-        // showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "or");
-        // showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "plata");
+        showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "or");
+        showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "plata");
 
         //mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "nom");
         //mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "radi");
@@ -33,6 +33,7 @@ public class Exercici0202 {
         //mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "distància");
 
 
+       /*
         ArrayList<HashMap<String, Object>> dades = new ArrayList<>();
 
         ArrayList<String> caracteristiquesPacific = new ArrayList<>();
@@ -57,6 +58,7 @@ public class Exercici0202 {
         dades.add(crearMassaAigua("Mar de la Xina Meridional", "mar", 3500000, 5560, new ArrayList<>()));
 
         
+        
 
         try {
             generarJSON(dades, "./Deures02/data/aigua.json");
@@ -64,7 +66,7 @@ public class Exercici0202 {
             e.printStackTrace();
         }
         System.out.println(JSONEsportistesToArrayList("./Deures02/data/esportistes.json"));
-
+        */
         Locale.setDefault(defaultLocale);
         scanner.close();
     }
@@ -216,6 +218,62 @@ public class Exercici0202 {
      * @test ./runTest.sh com.exercicis.TestExercici0202#testShowEsportistesOrdenatsPerBronze
      */
     public static void showEsportistesOrdenatsPerMedalla(String filePath, String tipusMedalla) {
+        ArrayList<HashMap<String, Object>> esportistes = ordenarEsportistesPerMedalla(filePath, tipusMedalla);
+
+        String tipusMedallaCapitalized = tipusMedalla.substring(0, 1).toUpperCase() + tipusMedalla.substring(1).toLowerCase();
+
+        String[] headers = {"Nom", "País", "Naixement", tipusMedallaCapitalized};
+        int[] columnWidths = {20, 15, 10, 6};
+
+        StringBuilder rst = new StringBuilder();
+
+        rst.append("┌");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i]+2));
+            if (i < headers.length - 1) {
+                rst.append("┬");
+            }
+        }
+        rst.append("┐\n");
+
+        rst.append("│");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append(String.format(" %-"+columnWidths[i]+"s │", headers[i]));
+        }
+        rst.append("\n");
+
+        rst.append("├");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i]+2));
+            if (i < headers.length - 1) {
+                rst.append("┼");
+            }
+        }
+        rst.append("┤\n");
+
+        for (HashMap<String, Object> esportista : esportistes) {
+            HashMap<String, Integer> medalles = (HashMap<String, Integer>) esportista.get("medalles");
+            rst.append("│");
+            rst.append(String.format(" %-"+columnWidths[0]+"s │", esportista.get("nom")));
+            rst.append(String.format(" %-"+columnWidths[1]+"s │", esportista.get("pais")));
+            rst.append(String.format(" %-"+columnWidths[2]+"d │", esportista.get("any_naixement")));
+            rst.append(String.format(" %-"+columnWidths[3]+"d │", medalles.get(tipusMedalla)));
+            rst.append("\n");
+        }
+
+        rst.append("└");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i] + 2));
+            if (i < headers.length - 1) {
+                rst.append("┴");
+            } 
+            if (i == headers.length - 1) {  
+                rst.append("┘");
+            }
+        }
+        rst.append("\n");
+
+        System.out.print(rst);
     }
 
     /**
