@@ -22,16 +22,16 @@ public class Exercici0202 {
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
 
-        //showJSONAstronautes("./Deures02/data/astronautes.json");
+        //showJSONAstronautes("./data/astronautes.json");
 
-        //showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "or");
-        //showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "plata");
+        //showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "or");
+        //showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "plata");
 
-        // mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "nom");
-        // mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "radi");
-        // mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "massa");
-        // mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "distància");
-        JSONPlanetesToArrayList("./Deures02/data/planetes.json");
+        mostrarPlanetesOrdenats("./data/planetes.json", "nom");
+        mostrarPlanetesOrdenats("./data/planetes.json", "radi");
+        mostrarPlanetesOrdenats("./data/planetes.json", "massa");
+        mostrarPlanetesOrdenats("./data/planetes.json", "distància");
+        // JSONPlanetesToArrayList("./data/planetes.json");
 
        /*
         ArrayList<HashMap<String, Object>> dades = new ArrayList<>();
@@ -61,11 +61,11 @@ public class Exercici0202 {
         
 
         try {
-            generarJSON(dades, "./Deures02/data/aigua.json");
+            generarJSON(dades, "./data/aigua.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(JSONEsportistesToArrayList("./Deures02/data/esportistes.json"));
+        System.out.println(JSONEsportistesToArrayList("./data/esportistes.json"));
         */
         Locale.setDefault(defaultLocale);
         scanner.close();
@@ -313,8 +313,8 @@ public class Exercici0202 {
                 dades_fisiques.put("massa_kg", massa_kg);
 
                 JSONObject orb = planeta.getJSONObject("orbita");
-                HashMap<String,Double> orbita = new HashMap<>();
-                Double distancia_mitjana_km = orb.getDouble("distancia_mitjana_km");
+                HashMap<String,Object> orbita = new HashMap<>();
+                Integer distancia_mitjana_km = orb.getInt("distancia_mitjana_km");
                 Double periode_orbital_dies = orb.getDouble("periode_orbital_dies");
                 orbita.put("distancia_mitjana_km", distancia_mitjana_km);
                 orbita.put("periode_orbital_dies", periode_orbital_dies);
@@ -362,7 +362,7 @@ public class Exercici0202 {
           * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsMassa
           * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsDistancia
           */
-         public static void mostrarPlanetesOrdenats(String filePath, String columnaOrdenacio) throws IOException {
+        public static void mostrarPlanetesOrdenats(String filePath, String columnaOrdenacio) throws IOException {
         ArrayList<HashMap<String, Object>> planetes = JSONPlanetesToArrayList(filePath);
         
 
@@ -396,33 +396,42 @@ public class Exercici0202 {
         }
         rst.append("┤\n");
 
-        switch (columnaOrdenacio) {
-            case "nom":
-                planetes.sort((planeta1, planeta2) -> ((String) planeta1.get("nom")).compareTo((String) planeta2.get("nom")));
-                break;
-            case "radi":
-                planetes.sort((planeta1, planeta2) -> {
-                    HashMap<String, Double> dades1 = (HashMap<String, Double>) planeta1.get("dades_fisiques");
-                    HashMap<String, Double> dades2 = (HashMap<String, Double>) planeta2.get("dades_fisiques");
-                    return dades1.get("radi_km").compareTo(dades2.get("radi_km"));
-                });
-                break;
-            case "massa":
-                planetes.sort((planeta1, planeta2) -> {
-                    HashMap<String, Double> dades1 = (HashMap<String, Double>) planeta1.get("dades_fisiques");
-                    HashMap<String, Double> dades2 = (HashMap<String, Double>) planeta2.get("dades_fisiques");
-                    return dades1.get("massa_kg").compareTo(dades2.get("massa_kg"));
-                });
-                break;
-            case "distància":
-                planetes.sort((planeta1, planeta2) -> {
-                    HashMap<String, Double> orbita1 = (HashMap<String, Double>) planeta1.get("orbita");
-                    HashMap<String, Double> orbita2 = (HashMap<String, Double>) planeta2.get("orbita");
-                    return orbita1.get("distancia_mitjana_km").compareTo(orbita2.get("distancia_mitjana_km"));
-                });
-                break;
-            default:
-                throw new IllegalArgumentException("Columna d'ordenació invàlida: " + columnaOrdenacio);
+        switch (columnaOrdenacio.toLowerCase().trim()) {
+            case "nom" -> {
+            System.out.println("Ordenat per nom: ");
+            planetes.sort((planeta1, planeta2) -> ((String) planeta1.get("nom")).compareTo((String) planeta2.get("nom")));
+            }
+            case "radi" -> {
+            System.out.println("Ordenat per radi: ");
+            planetes.sort((planeta1, planeta2) -> {
+                HashMap<String, Object> dades1 = (HashMap<String, Object>) planeta1.get("dades_fisiques");
+                HashMap<String, Object> dades2 = (HashMap<String, Object>) planeta2.get("dades_fisiques");
+                Double a = (Double) dades1.get("radi_km");
+                Double b = (Double) dades2.get("radi_km");
+                return  a.compareTo(b);
+            });
+            }
+            case "massa" -> {
+            System.out.println("Ordenat per massa: ");
+            planetes.sort((planeta1, planeta2) -> {
+                HashMap<String, Object> dades1 = (HashMap<String, Object>) planeta1.get("dades_fisiques");
+                HashMap<String, Object> dades2 = (HashMap<String, Object>) planeta2.get("dades_fisiques");
+                Double a = (Double) dades1.get("massa_kg");
+                Double b = (Double) dades2.get("massa_kg");
+                return  a.compareTo(b);
+            });
+            }
+            case "distància" -> {
+            System.out.println("Ordenat per distància: ");
+            planetes.sort((planeta1, planeta2) -> {
+                HashMap<String, Object> orbita1 = (HashMap<String, Object>) planeta1.get("orbita");
+                HashMap<String, Object> orbita2 = (HashMap<String, Object>) planeta2.get("orbita");
+                Integer a = (Integer) orbita1.get("distancia_mitjana_km");
+                Integer b = (Integer) orbita2.get("distancia_mitjana_km");
+                return  a.compareTo(b);
+            });
+            }
+            default -> throw new IllegalArgumentException("Columna d'ordenació invàlida: " + columnaOrdenacio);
         }
 
         for (HashMap<String, Object> planeta : planetes) {
@@ -432,7 +441,7 @@ public class Exercici0202 {
             rst.append("│");
             rst.append(String.format(" %-"+columnWidths[0]+"s │", planeta.get("nom")));
             rst.append(String.format(" %-"+columnWidths[1]+"s │", dades_fisiquesMap.get("radi_km")));
-            rst.append(String.format(" %-"+columnWidths[2]+"s │", dades_fisiquesMap.get("massa_kg")));
+            rst.append(String.format(" %-"+columnWidths[2]+"s │", (Double) dades_fisiquesMap.get("massa_kg")));
             rst.append(String.format(" %-"+columnWidths[3]+"s │", orbitaMap.get("distancia_mitjana_km")));
             rst.append("\n");
         }
