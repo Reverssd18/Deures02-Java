@@ -17,21 +17,21 @@ public class Exercici0202 {
     public static Locale defaultLocale;
     
     // ./run.sh com.exercicis.Exercici0202
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         scanner = new Scanner(System.in);
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
 
         //showJSONAstronautes("./Deures02/data/astronautes.json");
 
-        showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "or");
-        showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "plata");
+        //showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "or");
+        //showEsportistesOrdenatsPerMedalla("./Deures02/data/esportistes.json", "plata");
 
-        //mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "nom");
-        //mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "radi");
-        //mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "massa");
-        //mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "distància");
-
+        // mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "nom");
+        // mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "radi");
+        // mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "massa");
+        // mostrarPlanetesOrdenats("./Deures02/data/planetes.json", "distància");
+        JSONPlanetesToArrayList("./Deures02/data/planetes.json");
 
        /*
         ArrayList<HashMap<String, Object>> dades = new ArrayList<>();
@@ -81,26 +81,26 @@ public class Exercici0202 {
      * > Astronauta 1:
      *   Nom: Neil Armstrong
      *   Naixement: 1930
-     * 
-     * @test ./runTest.sh com.exercicis.TestExercici0202#testShowJSONAstronautes
-     */
-    public static void showJSONAstronautes(String filePath) {
+          * @throws IOException 
+          * 
+          * @test ./runTest.sh com.exercicis.TestExercici0202#testShowJSONAstronautes
+          */
+         public static void showJSONAstronautes(String filePath) throws IOException {
        
-        try {
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-            JSONObject jSONObject = new JSONObject(content); //Passar a objecte
-            JSONArray jSONArray = jSONObject.getJSONArray("astronautes"); //Passar a array
-            
-            for (int i = 0; i < jSONArray.length(); i++) {
-                JSONObject astronauta = jSONArray.getJSONObject(i);
-                System.out.println("> Astronauta " + i + ":");
-                System.out.println("  Nom: " + astronauta.getString("nom"));
-                System.out.println("  Naixement: " + astronauta.getInt("any_naixement"));
-            }       
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    
+        String content = new String(Files.readAllBytes(Paths.get(filePath)));
+        JSONObject jSONObject = new JSONObject(content); //Passar a objecte
+        JSONArray jSONArray = jSONObject.getJSONArray("astronautes"); //Passar a array
         
+        for (int i = 0; i < jSONArray.length(); i++) {
+            JSONObject astronauta = jSONArray.getJSONObject(i);
+            System.out.println("> Astronauta " + i + ":");
+            System.out.println("  Nom: " + astronauta.getString("nom"));
+            System.out.println("  Naixement: " + astronauta.getInt("any_naixement"));
+        }       
+    
+    
+    
     } 
 
     /**
@@ -293,8 +293,42 @@ public class Exercici0202 {
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0202#testJSONPlanetesToArrayList
      */
-    public static ArrayList<HashMap<String, Object>> JSONPlanetesToArrayList(String filePath) {
+    public static ArrayList<HashMap<String, Object>> JSONPlanetesToArrayList(String filePath) throws IOException{
         ArrayList<HashMap<String, Object>> planetesList = new ArrayList<>();
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            JSONObject jsonObject = new JSONObject(content);
+            JSONArray jsonArray = jsonObject.getJSONArray("planetes");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                HashMap<String, Object> planet = new HashMap<>();
+                JSONObject planeta = jsonArray.getJSONObject(i);
+                String nom = planeta.getString("nom");
+
+                JSONObject dades = planeta.getJSONObject("dades_fisiques");
+                HashMap<String,Double> dades_fisiques = new HashMap<>();
+                Double radi_km = dades.getDouble("radi_km");
+                Double massa_kg = dades.getDouble("massa_kg");
+                dades_fisiques.put("radi_km", radi_km);
+                dades_fisiques.put("massa_kg", massa_kg);
+
+                JSONObject orb = planeta.getJSONObject("orbita");
+                HashMap<String,Double> orbita = new HashMap<>();
+                Double distancia_mitjana_km = orb.getDouble("distancia_mitjana_km");
+                Double periode_orbital_dies = orb.getDouble("periode_orbital_dies");
+                orbita.put("distancia_mitjana_km", distancia_mitjana_km);
+                orbita.put("periode_orbital_dies", periode_orbital_dies);
+
+                planet.put("nom", nom);
+                planet.put("dades_fisiques", dades_fisiques);
+                planet.put("orbita", orbita);
+
+                planetesList.add(planet);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return planetesList;
     }
 
@@ -319,15 +353,104 @@ public class Exercici0202 {
      * 
      * @param filePath Ruta de l'arxiu JSON amb les dades dels planetes.
      * @param columnaOrdenacio La columna per la qual es vol ordenar ("nom", "radi", "massa", "distància").
-     * 
-     * @throws IllegalArgumentException si el paràmetre de columna és invàlid.
-     * 
-     * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsNom
-     * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsRadi
-     * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsMassa
-     * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsDistancia
-     */
-    public static void mostrarPlanetesOrdenats(String filePath, String columnaOrdenacio) {
+          * @throws IOException 
+          * 
+          * @throws IllegalArgumentException si el paràmetre de columna és invàlid.
+          * 
+          * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsNom
+          * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsRadi
+          * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsMassa
+          * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsDistancia
+          */
+         public static void mostrarPlanetesOrdenats(String filePath, String columnaOrdenacio) throws IOException {
+        ArrayList<HashMap<String, Object>> planetes = JSONPlanetesToArrayList(filePath);
+        
+
+
+        String[] headers = {"Nom", "Radi (km)", "Massa (kg)", "Distància (km)"};
+        int[] columnWidths = {20, 15, 15, 15};
+
+        StringBuilder rst = new StringBuilder();
+
+        rst.append("┌");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i]+2));
+            if (i < headers.length - 1) {
+                rst.append("┬");
+            }
+        }
+        rst.append("┐\n");
+
+        rst.append("│");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append(String.format(" %-"+columnWidths[i]+"s │", headers[i]));
+        }
+        rst.append("\n");
+
+        rst.append("├");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i]+2));
+            if (i < headers.length - 1) {
+                rst.append("┼");
+            }
+        }
+        rst.append("┤\n");
+
+        switch (columnaOrdenacio) {
+            case "nom":
+                planetes.sort((planeta1, planeta2) -> ((String) planeta1.get("nom")).compareTo((String) planeta2.get("nom")));
+                break;
+            case "radi":
+                planetes.sort((planeta1, planeta2) -> {
+                    HashMap<String, Double> dades1 = (HashMap<String, Double>) planeta1.get("dades_fisiques");
+                    HashMap<String, Double> dades2 = (HashMap<String, Double>) planeta2.get("dades_fisiques");
+                    return dades1.get("radi_km").compareTo(dades2.get("radi_km"));
+                });
+                break;
+            case "massa":
+                planetes.sort((planeta1, planeta2) -> {
+                    HashMap<String, Double> dades1 = (HashMap<String, Double>) planeta1.get("dades_fisiques");
+                    HashMap<String, Double> dades2 = (HashMap<String, Double>) planeta2.get("dades_fisiques");
+                    return dades1.get("massa_kg").compareTo(dades2.get("massa_kg"));
+                });
+                break;
+            case "distància":
+                planetes.sort((planeta1, planeta2) -> {
+                    HashMap<String, Double> orbita1 = (HashMap<String, Double>) planeta1.get("orbita");
+                    HashMap<String, Double> orbita2 = (HashMap<String, Double>) planeta2.get("orbita");
+                    return orbita1.get("distancia_mitjana_km").compareTo(orbita2.get("distancia_mitjana_km"));
+                });
+                break;
+            default:
+                throw new IllegalArgumentException("Columna d'ordenació invàlida: " + columnaOrdenacio);
+        }
+
+        for (HashMap<String, Object> planeta : planetes) {
+            HashMap<String, Object> dades_fisiquesMap = (HashMap<String, Object>) planeta.get("dades_fisiques");
+            HashMap<String, Object> orbitaMap = (HashMap<String, Object>) planeta.get("orbita");
+
+            rst.append("│");
+            rst.append(String.format(" %-"+columnWidths[0]+"s │", planeta.get("nom")));
+            rst.append(String.format(" %-"+columnWidths[1]+"s │", dades_fisiquesMap.get("radi_km")));
+            rst.append(String.format(" %-"+columnWidths[2]+"s │", dades_fisiquesMap.get("massa_kg")));
+            rst.append(String.format(" %-"+columnWidths[3]+"s │", orbitaMap.get("distancia_mitjana_km")));
+            rst.append("\n");
+        }
+
+        rst.append("└");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i] + 2));
+            if (i < headers.length - 1) {
+                rst.append("┴");
+            } 
+            if (i == headers.length - 1) {  
+                rst.append("┘");
+            }
+        }
+        rst.append("\n");
+
+        System.out.print(rst); 
+        
     }
 
     /**

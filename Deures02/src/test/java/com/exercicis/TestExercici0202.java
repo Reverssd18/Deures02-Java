@@ -1,26 +1,23 @@
 package com.exercicis;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import static org.junit.jupiter.api.Assertions.*;
-import com.github.stefanbirkner.systemlambda.SystemLambda;
-import com.testStringUtils.TestStringUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.json.JSONObject;
-import org.json.JSONArray;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
+import com.github.stefanbirkner.systemlambda.SystemLambda;
+import com.testStringUtils.TestStringUtils;
 
 class TestExercici0202 {
 
