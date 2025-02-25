@@ -1,5 +1,6 @@
 package com.exercicis;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -56,7 +57,7 @@ public class Exercici0202 {
         dades.add(crearMassaAigua("Mar Mediterrani", "mar", 2500000, 5121, caracteristiquesMediterrani));
         dades.add(crearMassaAigua("Mar Carib", "mar", 2754000, 7686, new ArrayList<>()));
         dades.add(crearMassaAigua("Mar de la Xina Meridional", "mar", 3500000, 5560, new ArrayList<>()));
-        /* 
+        
         
         
 
@@ -64,9 +65,8 @@ public class Exercici0202 {
             generarJSON(dades, "./data/aigua.json");
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        System.out.println(JSONEsportistesToArrayList("./data/esportistes.json"));
-        */
+        }    
+
         Locale.setDefault(defaultLocale);
         scanner.close();
     }
@@ -509,5 +509,11 @@ public class Exercici0202 {
      */
     public static void generarJSON(ArrayList<HashMap<String, Object>> dades, String filePath) throws IOException {
         
+        JSONArray jsonArray = new JSONArray(dades);
+        try (FileWriter file = new FileWriter(filePath)) {
+                file.write(jsonArray.toString(4));
+        } 
+        System.out.println("Arxiu generat amb la informació de mars i oceans.");
+
     }
 }
