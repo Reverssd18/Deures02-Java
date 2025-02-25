@@ -65,7 +65,13 @@ public class Exercici0203 {
      * @test ./runTest.sh com.exercicis.TestExercici0203#testValidarURL
      */
     public static boolean validarURL(String url) {
-        return false;
+    
+        boolean isValid = true;
+        if (url == null || url.isEmpty() || url.contains(" ")) {
+            isValid = false;
+        };
+        
+        return isValid && url.startsWith("http://") || url.startsWith("https://");
     }
 
     /**
