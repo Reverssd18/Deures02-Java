@@ -37,7 +37,10 @@ public class Exercici0203 {
             ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
             ArrayList<HashMap<String, Object>> monumentsFiltrats = filtraMonuments(monuments, "categoria", "cultural");
             System.out.println(monuments);
-
+            for (int i = 0; i < monuments.size(); i++) {
+                HashMap <String, Object> monument = (HashMap<String, Object>) monuments.get(i);
+                System.out.println(getMonumentValue(monument,"latitud"));
+            }
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -136,7 +139,16 @@ public class Exercici0203 {
                             altre.put("valor", detalls.get(detallsKey));
                             altres.put(detallsKey, altre);
                         } else {
-                            detallsMap.put(detallsKey, detalls.get(detallsKey));
+                            if (detallsKey.equals("coordenades")) {
+                                JSONObject coordenades = detalls.getJSONObject("coordenades");
+                                HashMap<String, Object> coordenadesMap = new HashMap<>();
+                                for (String coordKey : coordenades.keySet()) {
+                                    coordenadesMap.put(coordKey, coordenades.get(coordKey));
+                                }
+                                detallsMap.put("coordenades", coordenadesMap);
+                            } else {
+                                detallsMap.put(detallsKey, detalls.get(detallsKey));
+                            }
                         }
                     }
                     detallsMap.put("altres", altres);
@@ -166,7 +178,23 @@ public class Exercici0203 {
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0203#testGetMonumentValue
      */
-    private static Object getMonumentValue(HashMap<String, Object> monument, String key) {
+    private static Object getMonumentValue(HashMap<String,Object> monument, String key) {
+
+        switch (key) {
+            case "nom", "pais", "categoria" -> {
+            return monument.get(key);
+            }
+            case "any" -> {
+            HashMap<String, Object> detalls = (HashMap<String, Object>) monument.get("detalls");
+            return detalls != null ? detalls.get("any_declaracio") : null;
+            }
+            case "latitud", "longitud" -> {
+            HashMap<String, Object> detalls = (HashMap<String, Object>) monument.get("detalls");
+            HashMap<String, Object> coordenades = (HashMap<String, Object>) detalls.get("coordenades");
+            return coordenades != null ? coordenades.get(key) : null;
+
+            }
+        }
         return null;
     }
     
