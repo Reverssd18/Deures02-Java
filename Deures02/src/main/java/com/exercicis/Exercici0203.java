@@ -19,7 +19,7 @@ public class Exercici0203 {
     
     // Fes anar el 'main' de l'exercici amb:
     // ./run.sh com.exercicis.Exercici0203
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         scanner = new Scanner(System.in);
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
@@ -34,14 +34,10 @@ public class Exercici0203 {
         // System.out.println(validarURL(url1)); 
         
         try {
-            ArrayList<HashMap<String, Object>> monuments = loadMonuments("./data/monuments.json");
+            ArrayList<HashMap<String, Object>> monuments = loadMonuments("./Deures02/data/monuments.json");
             ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
             ArrayList<HashMap<String, Object>> monumentsFiltrats = filtraMonuments(monuments, "categoria", "cultural");
-            System.out.println(monuments);
-            for (int i = 0; i < monuments.size(); i++) {
-                HashMap <String, Object> monument = (HashMap<String, Object>) monuments.get(i);
-                System.out.println(getMonumentValue(monument,"latitud"));
-            }
+            taulaMonuments(monuments);
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -53,7 +49,7 @@ public class Exercici0203 {
         // } catch (IOException e) {
         //     e.printStackTrace();
         // }
-
+        
         Locale.setDefault(defaultLocale);
         scanner.close();
     }
@@ -86,18 +82,14 @@ public class Exercici0203 {
 
         String senseProtocol = url.substring(url.indexOf("://") + 3);
 
-        String domini = "";
+        String domini;
         if (senseProtocol.contains("/")) {
             domini = senseProtocol.split("/", 2)[0];
         } else {
             domini = senseProtocol;
         }
 
-        if (!domini.contains(".") || domini.startsWith(".") || domini.endsWith(".")) {
-            return false;
-        }
-        
-        return true;
+        return !(!domini.contains(".") || domini.startsWith(".") || domini.endsWith("."));
     }
 
     /**
@@ -144,7 +136,7 @@ public class Exercici0203 {
                                 JSONObject coordenades = detalls.getJSONObject("coordenades");
                                 HashMap<String, Object> coordenadesMap = new HashMap<>();
                                 for (String coordKey : coordenades.keySet()) {
-                                    coordenadesMap.put(coordKey, coordenades.get(coordKey));
+                                    coordenadesMap.put(coordKey, coordenades.getDouble(coordKey));
                                 }
                                 detallsMap.put("coordenades", coordenadesMap);
                             } else {
@@ -335,6 +327,9 @@ public class Exercici0203 {
      * @param values Array amb els valors de cada columna.
      * @param columnWidths Array amb l'amplada de cada columna.
      * @return Una cadena de text formatejada representant una fila de la taula.
+     * 
+     * 
+     * @test ./runTest.sh com.exercicis.TestExercici0203#testFormatRow
      */
     public static String formatRow(String[] values, int[] columnWidths) {
         String rst = "";
@@ -379,10 +374,15 @@ public class Exercici0203 {
      *         o una cadena buida si no es troben les dades.
      */
     public static String getCoordsString(HashMap<String, Object> monument) {
+        Double latitud = (Double) getMonumentValue(monument, "latitud");
+        Double longitud = (Double) getMonumentValue(monument, "longitud");
 
-        return "";
+        if (latitud == null || longitud == null){
+            return " ";
+        }
+        
+        return String.format("%.1f,%.1f", latitud, longitud);
     }
-
     /**
      * Mostra una taula amb la informació d'una llista de monuments.
      * 
@@ -402,7 +402,41 @@ public class Exercici0203 {
      * @test ./runTest.sh com.exercicis.TestExercici0203#testTaulaMonuments
      */
     public static void taulaMonuments(ArrayList<HashMap<String, Object>> monuments) {
+        StringBuilder rst = new StringBuilder();
         
+        int [] columnWidths = {14, 5, 4, 12};
+        char[] separators = {'┌', '┬', '┐'};
+        rst.append(generaMarcTaula(columnWidths, separators)).append("\n");
+        
+        String[] headers = {"Nom", "Pais", "Any", "Coords"};
+        rst.append(formatRow(headers, columnWidths)).append("\n");
+        
+
+        separators[0] = '├';
+        separators[1] = '┼';
+        separators[2] = '┤';
+        rst.append(generaMarcTaula(columnWidths, separators)).append("\n");
+        
+        for (int i = 0; i < monuments.size(); i++) {
+            HashMap<String, Object> monument = monuments.get(i);
+            String nom = (String) getMonumentValue(monument, "nom");
+            String pais = (String) getMonumentValue(monument, "pais");
+            String any = String.valueOf(getMonumentValue(monument, "any"));
+            String coords = getCoordsString(monument);
+
+            String[] rowValues = {nom, pais, any, coords};
+            rst.append(formatRow(rowValues, columnWidths)).append("\n");
+        }
+        
+        separators[0] = '└';
+        separators[1] = '┴';
+        separators[2] = '┘';
+        rst.append(generaMarcTaula(columnWidths, separators));
+        
+        System.out.println(rst.toString());
+
+
+    
     }
 
     /**
