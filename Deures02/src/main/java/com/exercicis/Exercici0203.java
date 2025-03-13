@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
@@ -33,22 +34,23 @@ public class Exercici0203 {
         // validarURL(url1);
         // System.out.println(validarURL(url1)); 
         
-        try {
-            ArrayList<HashMap<String, Object>> monuments = loadMonuments("./Deures02/data/monuments.json");
-            ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
-            ArrayList<HashMap<String, Object>> monumentsFiltrats = filtraMonuments(monuments, "categoria", "cultural");
-            taulaMonuments(monuments);
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // try {
-        //     guardaBaralla("./data/baralla.json");
+        //     ArrayList<HashMap<String, Object>> monuments = loadMonuments("./Deures02/data/monuments.json");
+        //     ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
+        //     ArrayList<HashMap<String, Object>> monumentsFiltrats = filtraMonuments(monuments, "categoria", "cultural");
+        //     taulaMonuments(monuments);
+
+        // } catch (IllegalArgumentException e) {
+        //     e.printStackTrace();
         // } catch (IOException e) {
         //     e.printStackTrace();
         // }
+        try {
+            guardaBaralla("./data/baralla.json");
+            System.out.println(generaBaralla());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         
         Locale.setDefault(defaultLocale);
         scanner.close();
@@ -442,7 +444,7 @@ public class Exercici0203 {
     /**
      * Genera una baralla de cartes espanyola i la retorna en un ArrayList ordenat aleatòriament.
      * 
-     * La baralla consta de 40 cartes, amb quatre pals: "oros", "copes", "espases" i "bastos".
+     * La baralla consta de 48 cartes, amb quatre pals: "oros", "copes", "espases" i "bastos".
      * Cada pal té cartes numerades de l'1 al 12.
      * 
      * Cada carta es representa com un HashMap amb dues claus:
@@ -452,13 +454,25 @@ public class Exercici0203 {
      * Exemple de sortida d'una carta:
      * { "pal": "copes", "número": 10 }
      * 
-     * @return Un ArrayList que conté les 40 cartes de la baralla en ordre aleatori.
+     * @return Un ArrayList que conté les 48 cartes de la baralla en ordre aleatori.
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0203#testGeneraBaralla
      */
     public static ArrayList<HashMap<String, Object>> generaBaralla() {
         ArrayList<HashMap<String, Object>> baralla = new ArrayList<>();
+        String[] pals = {"oros", "copes", "espases", "bastos"};
+        Integer totalCartes = 12;
+        for (String pal : pals) {
+            for (int numero = 1; numero < totalCartes + 1; numero++) {
+                HashMap<String, Object> carta = new HashMap<>();
+                carta.put("pal", pal);
+                carta.put("número", numero);
+                baralla.add(carta);
+            }
+        }
 
+        Collections.shuffle(baralla);
+        
         return baralla;
     }
 
@@ -471,6 +485,8 @@ public class Exercici0203 {
      * @test ./runTest.sh com.exercicis.TestExercici0203#testGuardaBaralla
      */
     public static void guardaBaralla(String filePath) throws IOException {
-
+        ArrayList<HashMap<String, Object>> baralla = generaBaralla();
+        JSONArray jsonArray = new JSONArray(baralla);
+        Files.write(Paths.get(filePath), jsonArray.toString(4).getBytes());
     }
 }
